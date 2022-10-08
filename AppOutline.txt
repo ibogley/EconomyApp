@@ -1,0 +1,28 @@
+General Economic Dashboard
+- General Idea: Inuitive way to provide relevant graphs relating to a national, statewide, or local economy
+- UI Design
+	- Start with 3 buttons
+		- National
+		- Region (How to handle comparisons between regions?)
+			- Pull up a map of US states, filled in by region
+			- Click on regions you want
+				- Selected Regions are filled in
+		- State (How to handle comparisons between states?)
+			- Pull up a map of US states
+			- Click on States you want
+				- Selected States are filled in
+		- County (How to handle comparisons between counties? Perhaps able to select multiple?)
+			- Pull up a map of US States
+			- Click on State you want
+			- Pulls up a map of counties in said state
+			- Click on counties you want
+				- Selected Counties are filled in
+	- Graphs related to region selected are pulled up
+		- GDP
+		- Unemployment Rate
+		- Population
+		- Pie chart of different industries?
+- Backend
+	- Pure Shiny App?
+	- HTML page with R?
+	
