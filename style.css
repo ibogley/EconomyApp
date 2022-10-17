@@ -1,0 +1,10 @@
+#ModalWindow {
+  position: relative;
+  z-index: 1;
+  background-color: green;
+  position: fixed;
+  height: 90%;
+  width: 90%;
+  left: 2vw;
+  top: 2vh;
+}
