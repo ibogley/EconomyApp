@@ -2,8 +2,10 @@ library(shiny)
 library(urbnmapr)
 library(tidyverse)
 
+
+
 ui <- fluidPage(
-  tags$head(includeCSS("C:/Users/Ivar/Desktop/data_analysis/USEconomyApp/USEconomyApp/style.css")),
+  tags$head(includeCSS("style.css")),
   titlePanel("US 50 States: Economic Statistics"),
   selectInput("State","State",c("None",state.abb)),
   sidebarLayout(
@@ -21,7 +23,7 @@ ui <- fluidPage(
                    )
 )
 
-# Define server logic required to draw a histogram
+
 server <- function(input, output) {
   
   State <- reactive({input$State})
