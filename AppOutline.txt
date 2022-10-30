@@ -32,3 +32,4 @@ Next Steps:
 1. Get data from BEA
 2. Finalize graphs on modal window using data from BEA
 3. Switch Input State options to names, not abbreviation
+4. Diagnose Loading Times
