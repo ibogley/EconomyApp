@@ -26,3 +26,8 @@ General Economic Dashboard
 	- Pure Shiny App?
 	- HTML page with R?
 	
+
+
+Next Steps:
+1. Get data from BEA
+2. Finalize graphs on modal window using data from BEA

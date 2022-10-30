@@ -6,10 +6,10 @@ beaSpecs <- list(
   "UserID" = key,
   "Method" = "GetData",
   "datasetname" = "Regional",
-  "TableName" = "CAGDP2",
+  "TableName" = "SQGDP2",
   "LineCode" = 1,
-  "GeoFips" = "COUNTY",
-  "Year" = "2020",
+  "GeoFips" = "STATE",
+  "Year" = "2022",
   "ResultFormat" = "json"
 )
 
