@@ -25,6 +25,7 @@ ui <- fluidPage(
     )),
   conditionalPanel(condition = "input.Go>input.Reset",id = "ModalWindow",
                    actionButton("Reset","X"),
+                   br(),
                    withSpinner(plotOutput("StateGraph")),
                    withSpinner(plotOutput("GDPGraph")),
                    withSpinner(plotOutput("JobGraph")),
@@ -73,7 +74,7 @@ server <- function(input, output) {
   )
   
   StatePopulationDF <- beaGet(beaSpec = BEASpecsPopulation) %>%
-    mutate(State = state.abb[match(GeoName,state.name)]) %>%
+    mutate(State = state.abb[match(gsub(" \\*","",GeoName),state.name)]) %>%
     pivot_longer(6:15,names_to = "Year",values_to = "Population") %>%
     mutate(Year = as.integer(gsub("DataValue_","",Year))) %>%
     .[,c(2,3,6,7,8)]
@@ -87,7 +88,7 @@ server <- function(input, output) {
     .[,c(2,3,6,9,8)]
   
   StateJobsDF <- beaGet(beaSpec = BEASpecsEmployment) %>%
-    mutate(State = state.abb[match(GeoName,state.name)]) %>%
+    mutate(State = state.abb[match(gsub(" \\*","",GeoName),state.name)]) %>%
     pivot_longer(6:15,names_to = "Year",values_to = "Jobs") %>%
     mutate(Year = as.integer(gsub("DataValue_","",Year))) %>%
     .[,c(2,3,6,7,8)]
