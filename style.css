@@ -7,9 +7,13 @@
   width: 90%;
   left: 2vw;
   top: 2vh;
+  border-radius: 1vh;
+  overflow: auto;
 }
 
 #ModalWindow > div  {
   width: 49% !important;
   display: inline-block !important;
+  padding-left: 1%;
+  padding-top: 1%;
 }

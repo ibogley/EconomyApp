@@ -121,7 +121,7 @@ server <- function(input, output) {
       filter(State == input$State) %>%
       ggplot(aes(x = Year, y = Population)) +
       geom_line() + ylab("Population") +
-      labs(title = paste("Number of People in ",state.name[match(input$State,state.abb)],sep = "")) +
+      labs(title = paste("Number of People in ",state.name[match(input$State,state.abb)]," (Annually)",sep = "")) +
       theme(plot.title = element_text(hjust = .5))
   })
   
@@ -131,7 +131,7 @@ server <- function(input, output) {
       ggplot(aes(x = Date, y = GDP)) + 
       geom_line() + scale_y_continuous(labels = comma) +
       ylab("GDP (Current USD $)") +
-      labs(title = paste("Economic Size of ",state.name[match(input$State,state.abb)]," (GDP)",sep = "")) + 
+      labs(title = paste("Economic Size of ",state.name[match(input$State,state.abb)]," (GDP, Quarterly)",sep = "")) + 
       theme(plot.title = element_text(hjust = .5))
   })
   
@@ -140,7 +140,7 @@ server <- function(input, output) {
       filter(State == input$State) %>%
       ggplot(aes(x = Year, y = Jobs)) +
       geom_line() + ylab("Number of Jobs") +
-      labs(title = paste("Number of Jobs in ",state.name[match(input$State,state.abb)],sep = "")) +
+      labs(title = paste("Number of Jobs in ",state.name[match(input$State,state.abb)]," (Annually)",sep = "")) +
       theme(plot.title = element_text(hjust = .5))
   })
 }
