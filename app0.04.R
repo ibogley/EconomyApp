@@ -26,12 +26,16 @@ ui <- fluidPage(
   conditionalPanel(condition = "input.Go>input.Reset",id = "ModalWindow",
                    actionButton("Reset","X"),
                    br(),
-                   withSpinner(plotOutput("StateGraph")),
-                   withSpinner(plotOutput("GDPGraph")),
-                   withSpinner(plotOutput("JobGraph")),
-                   withSpinner(plotOutput("PopulationGraph"))
-                   )
-)
+                   tabsetPanel(
+                     tabPanel(title = "Typical Econ Stats",
+                              withSpinner(plotOutput("GDPGraph")),
+                              withSpinner(plotOutput("JobGraph")),
+                              withSpinner(plotOutput("PopulationGraph"))),
+                     tabPanel(title = "Geographic",
+                              withSpinner(plotOutput("StateGraph"))),
+                     tabPanel(title = "Trade/Investment")
+                   ))
+  )
 
 
 server <- function(input, output) {
