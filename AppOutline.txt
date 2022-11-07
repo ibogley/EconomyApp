@@ -26,8 +26,7 @@ General Economic Dashboard
 
 
 Next Steps:
-1. Get data from BEA
-2. Finalize graphs on modal window using data from BEA
-3. Switch Input State options to names, not abbreviation
-4. Diagnose Loading Times
-5. Transpose the geometry for Alaska and Hawaii to be included in the graph
+1. GDP breakdown by Industry, with options to toggle granularity
+2. What other stats to use? Breakdowns of existing ones?
+3. Switch graphs to plotly?
+4. Diagnose Geographic loading times?
