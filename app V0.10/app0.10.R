@@ -1,0 +1,124 @@
+library(shiny)
+library(urbnmapr)
+library(tidyverse)
+library(bea.R)
+library(tigris)
+#osm package instead of tigris to get highways?
+library(lubridate)
+library(scales)
+library(shinycssloaders)
+library(sf)
+library(future.apply)
+library(DT)
+library(plotly)
+
+plan(multisession)
+options(tigris_use_cache = TRUE)
+
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+
+CurrentYear <- as.numeric(substr(Sys.Date(),1,4))
+
+ui <- fluidPage(
+  tags$head(includeCSS("style.css")),
+  titlePanel("US 50 States: Economic Statistics"),
+  
+  
+  
+  #Main Page: Regional Selector 
+  sidebarLayout(
+    sidebarPanel(
+      selectInput("StateOrRegion","State or Region",c("State","Region","Nation")),
+      uiOutput("StateOrRegionSelector"),
+      sliderInput("Years","Years",2000,CurrentYear,c(2000,CurrentYear),sep = ""),
+      actionButton("Go","Go")
+    ),
+    mainPanel(
+      withSpinner(plotOutput("NationalGraph"))
+    )),
+  
+  
+  
+  
+  #Stats Panel
+  conditionalPanel(condition = "input.Go>input.Reset",id = "ModalWindow",
+                   actionButton("Reset","X"),
+                   br(),
+                   sidebarLayout(
+                     sidebarPanel(
+                       h2("Compare"),
+                       selectInput("ComparisonTimeScale","Time Scale",c("Year","Quarter")),
+                       uiOutput("ComparisonTimes"),
+                     ),
+                     mainPanel(
+                       tabsetPanel(
+                         #Tab 1: GDP View
+                         tabPanel(title = "Economic Size",
+                                  mainPanel(
+                                    withSpinner(plotOutput("GDPGraph")),
+                                    br(),
+                                    withSpinner(plotOutput("GDPComparisonIndustry1")),
+                                    withSpinner(plotOutput("GDPComparisonIndustry2")),
+                                    withSpinner(plotOutput("GDPComparisonSector1")),
+                                    withSpinner(plotOutput("GDPComparisonSector2"))
+                                  )
+                         ),
+                         #Tab 2: Labor View
+                         tabPanel(title = "Human Capital: The Job Market",
+                                  withSpinner(plotOutput("JobGraph")),
+                                  withSpinner(plotOutput("PopulationGraph"))
+                         ),
+                         #Tab 3: Capital View
+                         tabPanel(title = "Capital: Business Investment"),
+                         #Tab 4: Trade View
+                         tabPanel(title = "Trade"),
+                         #Tab 5: Geographic View
+                         tabPanel(title = "Geographic",
+                                  withSpinner(plotOutput("StateGraph"))),
+                         #Tab 6: Custom View
+                         tabPanel(title = "Custom",
+                         )
+                         
+                       )
+                     )
+                   )
+  )
+)
+
+
+server <- function(input, output) {
+  
+  BEAKey <- Sys.getenv("BEA_API_KEY")
+  
+  BEAYears <- paste((year(Sys.Date())-10):year(Sys.Date()),collapse = ",")
+  
+  output$ComparisonTimes <- renderUI({
+    UIElements <- list(
+      numericInput("ComparisonY1","Comparison: Year (1)",CurrentYear-1,input$Years[1],input$Years[2]),
+      numericInput("ComparisonY2","Comparison: Year (2)",CurrentYear,input$Years[1],input$Years[2])
+    )
+    
+    
+    if (input$ComparisonTimeScale=="Quarter") {
+      UIElements <- list(
+        numericInput("ComparisonY1","Comparison: Year (1)",CurrentYear-1,input$Years[1],input$Years[2]),
+        numericInput("ComparisonQ1","Comparison: Quarter (1)",1,1,4),
+        numericInput("ComparisonY2","Comparison: Year (2)",CurrentYear,input$Years[1],input$Years[2]),
+        numericInput("ComparisonQ2","Comparison: Quarter (2)",1,1,4)
+      )
+    }
+    
+    UIElements
+  })
+  
+  source("scripts/NationalGraph.R",local = TRUE)
+  source("scripts/StateGraph.R",local = TRUE)
+  source("scripts/GDPGraph.R",local = TRUE)
+  source("scripts/GDPComparisonGraph.R",local = TRUE)
+  source("scripts/JobGraph.R",local = TRUE)
+  source("scripts/PopulationGraph.R",local = TRUE)
+  
+}
+
+# Run the application 
+shinyApp(ui = ui, server = server)

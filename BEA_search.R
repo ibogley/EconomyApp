@@ -18,4 +18,4 @@ BEAspecsInternational <- list(
 
 beaGet(BEAspecsInternational)
 
-beaSearch("GDP") %>% view()
+beaSearch("Employment") %>% view()
