@@ -27,6 +27,7 @@ General Economic Dashboard
 
 Next Steps:
 1. GDP breakdown by Industry, with options to toggle granularity
+	- On selecting industries in table and submitting comparisons, update bar chart and pie charts to compare selected industries with aggragated group of all others.
 2. What other stats to use? Breakdowns of existing ones?
 3. Switch graphs to plotly?
 4. Diagnose Geographic loading times?

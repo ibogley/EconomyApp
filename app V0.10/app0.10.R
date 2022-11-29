@@ -47,21 +47,26 @@ ui <- fluidPage(
                    sidebarLayout(
                      sidebarPanel(
                        h2("Compare"),
-                       selectInput("ComparisonTimeScale","Time Scale",c("Year","Quarter")),
+                       selectInput("ComparisonTimeScale","Time Scale",
+                                   c("Year","Quarter")),
                        uiOutput("ComparisonTimes"),
+                       uiOutput("ComparisonBreakdown"),
+                       actionButton("SubmitComparison","Submit Comparisons")
                      ),
                      mainPanel(
                        tabsetPanel(
+                         id = "StatTabs",
                          #Tab 1: GDP View
-                         tabPanel(title = "Economic Size",
-                                  mainPanel(
-                                    withSpinner(plotOutput("GDPGraph")),
-                                    br(),
-                                    withSpinner(plotOutput("GDPComparisonIndustry1")),
-                                    withSpinner(plotOutput("GDPComparisonIndustry2")),
-                                    withSpinner(plotOutput("GDPComparisonSector1")),
-                                    withSpinner(plotOutput("GDPComparisonSector2"))
-                                  )
+                         tabPanel(
+                           title = "Economic Size",
+                           mainPanel(
+                             withSpinner(plotOutput("GDPGraph")),
+                             br(),
+                             withSpinner(plotOutput("GDPComparisonIndustry1")),
+                             withSpinner(plotOutput("GDPComparisonIndustry2")),
+                             withSpinner(plotOutput("GDPComparisonSector1")),
+                             withSpinner(plotOutput("GDPComparisonSector2"))
+                           )
                          ),
                          #Tab 2: Labor View
                          tabPanel(title = "Human Capital: The Job Market",
@@ -76,7 +81,7 @@ ui <- fluidPage(
                          tabPanel(title = "Geographic",
                                   withSpinner(plotOutput("StateGraph"))),
                          #Tab 6: Custom View
-                         tabPanel(title = "Custom",
+                         tabPanel(title = "Custom"
                          )
                          
                        )
@@ -90,33 +95,27 @@ server <- function(input, output) {
   
   BEAKey <- Sys.getenv("BEA_API_KEY")
   
-  BEAYears <- paste((year(Sys.Date())-10):year(Sys.Date()),collapse = ",")
+  BEAYears <- paste(2000:CurrentYear,collapse = ",")
   
-  output$ComparisonTimes <- renderUI({
-    UIElements <- list(
-      numericInput("ComparisonY1","Comparison: Year (1)",CurrentYear-1,input$Years[1],input$Years[2]),
-      numericInput("ComparisonY2","Comparison: Year (2)",CurrentYear,input$Years[1],input$Years[2])
-    )
-    
-    
-    if (input$ComparisonTimeScale=="Quarter") {
-      UIElements <- list(
-        numericInput("ComparisonY1","Comparison: Year (1)",CurrentYear-1,input$Years[1],input$Years[2]),
-        numericInput("ComparisonQ1","Comparison: Quarter (1)",1,1,4),
-        numericInput("ComparisonY2","Comparison: Year (2)",CurrentYear,input$Years[1],input$Years[2]),
-        numericInput("ComparisonQ2","Comparison: Quarter (2)",1,1,4)
-      )
-    }
-    
-    UIElements
+  observeEvent(input$Go,{
+    BEAYears <- paste(input$Years[1]:input$Years[2],collapse = ",")
   })
   
+  
+  
+  source("scripts/GDPDataScript.R",local = TRUE)
   source("scripts/NationalGraph.R",local = TRUE)
   source("scripts/StateGraph.R",local = TRUE)
-  source("scripts/GDPGraph.R",local = TRUE)
-  source("scripts/GDPComparisonGraph.R",local = TRUE)
-  source("scripts/JobGraph.R",local = TRUE)
-  source("scripts/PopulationGraph.R",local = TRUE)
+  
+  
+  
+  observeEvent(input$Go,{
+    source("scripts/ComparisonScript.R",local = TRUE)
+    source("scripts/GDPGraph.R",local = TRUE)
+    source("scripts/GDPComparisonGraph.R",local = TRUE)
+    source("scripts/JobGraph.R",local = TRUE)
+    source("scripts/PopulationGraph.R",local = TRUE)
+  })
   
 }
 
