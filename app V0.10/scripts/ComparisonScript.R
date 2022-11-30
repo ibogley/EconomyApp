@@ -17,22 +17,22 @@ output$ComparisonTimes <- renderUI({
   UIElements
 })
 
-GDPIndustries <- c("Agriculture, forestry, fishing and hunting","Mining, quarrying, and oil and gas extraction",
-                   "Utilities","Construction","Manufacturing","Wholesale Trade","Retail Trade",
-                   "Transportation and warehousing","Information","Finance and insurance",
-                   "Real estate and rental and leasing","Professional, scientific, and technical services",
-                   "Management of companies and enterprises",
-                   "Administrative and support and waste management and remediation services",
-                   "Educational services","Health care and social assistance","Arts, entertainment, and recreation",
-                   "Accommodation and food services","Other services (except government and government enterprises)",
-                   "Federal civilian","Military","State and local")
+GDPIndustryBreakdown <- data.frame(Industry = c("Agriculture, forestry, fishing and hunting","Mining, quarrying, and oil and gas extraction",
+                                                "Utilities","Construction","Manufacturing","Wholesale Trade","Retail Trade",
+                                                "Transportation and warehousing","Information","Finance and insurance",
+                                                "Real estate and rental and leasing","Professional, scientific, and technical services",
+                                                "Management of companies and enterprises",
+                                                "Administrative and support and waste management and remediation services",
+                                                "Educational services","Health care and social assistance","Arts, entertainment, and recreation",
+                                                "Accommodation and food services","Other services (except government and government enterprises)",
+                                                "Federal civilian","Military","State and local")) %>%
+  mutate(Sector = ifelse(
+    Industry %in% c("Federal civilian","Military","State and local"),
+    "Government","Private Industries")) %>%
+  .[,2:1]
 
 output$GDPBreakdown <- renderDataTable({
-  data.frame(Industry = GDPIndustries) %>%
-    mutate(Sector = ifelse(
-      Industry %in% c("Federal civilian","Military","State and local"),
-      "Government","Private Industries")) %>%
-    .[,2:1] %>%
+  GDPIndustryBreakdown %>%
     datatable(rownames = FALSE)
 })
 

@@ -1,3 +1,7 @@
+PlotTheme <- theme(plot.title = element_text(hjust = .5),legend.position = "none",
+                   axis.title = element_blank(),axis.text = element_blank(),
+                   axis.ticks = element_blank())
+
 output$GDPComparisonIndustry1 <- renderPlot({
   
   if (input$ComparisonTimeScale=="Year") {
@@ -22,6 +26,16 @@ output$GDPComparisonIndustry1 <- renderPlot({
     
   }
   
+  if (length(input$GDPBreakdown_rows_selected)>0) {
+    TempDF <- TempDF %>%
+      mutate(Industry = ifelse(Industry %in% GDPIndustryBreakdown[input$GDPBreakdown_rows_selected,2],Industry,"Other")) %>%
+      group_by(State,Region,Industry) %>% summarise(GDP = sum(GDP))
+    
+    PlotTheme <- theme(plot.title = element_text(hjust = .5),
+                       axis.title = element_blank(),axis.text = element_blank(),
+                       axis.ticks = element_blank())
+  }
+  
   
   if (input$StateOrRegion == "State") {
     TempDF %>%
@@ -31,9 +45,8 @@ output$GDPComparisonIndustry1 <- renderPlot({
       geom_bar(stat = "identity") +
       coord_polar("y") +
       PlotTitle + 
-      theme(plot.title = element_text(hjust = .5),legend.position = "none",
-            axis.title = element_blank(),axis.text = element_blank(),
-            axis.ticks = element_blank())
+      PlotTheme
+    
   } else if (input$StateOrRegion == "Region") {
     TempDF %>%
       filter(Region == input$Region) %>%
@@ -42,9 +55,7 @@ output$GDPComparisonIndustry1 <- renderPlot({
       geom_bar(stat = "identity") +
       coord_polar("y") +
       PlotTitle + 
-      theme(plot.title = element_text(hjust = .5),legend.position = "none",
-            axis.title = element_blank(),axis.text = element_blank(),
-            axis.ticks = element_blank())
+      PlotTheme
   }
 })
 
@@ -76,6 +87,16 @@ output$GDPComparisonIndustry2 <- renderPlot({
     
   }
   
+  if (length(input$GDPBreakdown_rows_selected)>0) {
+    TempDF <- TempDF %>%
+      mutate(Industry = ifelse(Industry %in% GDPIndustryBreakdown[input$GDPBreakdown_rows_selected,2],Industry,"Other")) %>%
+      group_by(State,Region,Industry) %>% summarise(GDP = sum(GDP))
+    
+    PlotTheme <- theme(plot.title = element_text(hjust = .5),
+                       axis.title = element_blank(),axis.text = element_blank(),
+                       axis.ticks = element_blank())
+  }
+  
   
   if (input$StateOrRegion == "State") {
     TempDF %>%
@@ -85,9 +106,8 @@ output$GDPComparisonIndustry2 <- renderPlot({
       geom_bar(stat = "identity") +
       coord_polar("y") +
       PlotTitle + 
-      theme(plot.title = element_text(hjust = .5),legend.position = "none",
-            axis.title = element_blank(),axis.text = element_blank(),
-            axis.ticks = element_blank())
+      PlotTheme
+    
   } else if (input$StateOrRegion == "Region") {
     TempDF %>%
       filter(Region == input$Region) %>%
@@ -96,9 +116,7 @@ output$GDPComparisonIndustry2 <- renderPlot({
       geom_bar(stat = "identity") +
       coord_polar("y") +
       PlotTitle + 
-      theme(plot.title = element_text(hjust = .5),legend.position = "none",
-            axis.title = element_blank(),axis.text = element_blank(),
-            axis.ticks = element_blank())
+      PlotTheme
   }
 })
 
@@ -138,7 +156,7 @@ output$GDPComparisonSector1 <- renderPlot({
       geom_bar(stat = "identity") +
       coord_polar("y") +
       PlotTitle + 
-      theme(plot.title = element_text(hjust = .5),legend.position = "none",
+      theme(plot.title = element_text(hjust = .5),
             axis.title = element_blank(),axis.text = element_blank(),
             axis.ticks = element_blank())
   } else if (input$StateOrRegion == "Region") {
@@ -149,7 +167,7 @@ output$GDPComparisonSector1 <- renderPlot({
       geom_bar(stat = "identity") +
       coord_polar("y") +
       PlotTitle + 
-      theme(plot.title = element_text(hjust = .5),legend.position = "none",
+      theme(plot.title = element_text(hjust = .5),
             axis.title = element_blank(),axis.text = element_blank(),
             axis.ticks = element_blank())
   }
@@ -189,7 +207,7 @@ output$GDPComparisonSector2 <- renderPlot({
       geom_bar(stat = "identity") +
       coord_polar("y") +
       PlotTitle + 
-      theme(plot.title = element_text(hjust = .5),legend.position = "none",
+      theme(plot.title = element_text(hjust = .5),
             axis.title = element_blank(),axis.text = element_blank(),
             axis.ticks = element_blank())
   } else if (input$StateOrRegion == "Region") {
@@ -200,7 +218,7 @@ output$GDPComparisonSector2 <- renderPlot({
       geom_bar(stat = "identity") +
       coord_polar("y") +
       PlotTitle + 
-      theme(plot.title = element_text(hjust = .5),legend.position = "none",
+      theme(plot.title = element_text(hjust = .5),
             axis.title = element_blank(),axis.text = element_blank(),
             axis.ticks = element_blank())
   }

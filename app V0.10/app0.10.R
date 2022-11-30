@@ -50,8 +50,7 @@ ui <- fluidPage(
                        selectInput("ComparisonTimeScale","Time Scale",
                                    c("Year","Quarter")),
                        uiOutput("ComparisonTimes"),
-                       uiOutput("ComparisonBreakdown"),
-                       actionButton("SubmitComparison","Submit Comparisons")
+                       uiOutput("ComparisonBreakdown")
                      ),
                      mainPanel(
                        tabsetPanel(
