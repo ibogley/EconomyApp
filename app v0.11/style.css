@@ -1,7 +1,7 @@
 #ModalWindow {
   position: relative;
   z-index: 1;
-  background-color: green;
+  background-color: lightgrey;
   position: fixed;
   height: 90%;
   width: 90%;
@@ -19,37 +19,50 @@
 }
 
 #GDPGraph {
-  width: 75% !important;
+  width: 49% !important;
   display: inline-block !important;
+  float: left;
 }
 
 #JobGraph {
-  width: 45% !important;
+  width: 49% !important;
   display: inline-block !important;
 }
 
 #PopulationGraph {
-  width: 45% !important;
+  width: 49% !important;
   display: inline-block !important;
 }
 
+#CompareContainer {
+  height: 60vh;
+  overflow: scroll;
+}
+
+#GDPComparisonContainer {
+  width: 50%;
+  display: inline-block;
+}
+
 #GDPComparisonIndustry1 {
-  width: 45% !important;
+  width: 49% !important;
+  aspect-ratio: 1 !important;
   display: inline-block;
 }
 
 #GDPComparisonIndustry2 {
-  width: 45% !important;
+  width: 49% !important;
   display: inline-block;
+  aspect-ratio: 1 !important;
 }
 
 #GDPComparisonSector1 {
-  width: 45% !important;
+  width: 49% !important;
   display: inline-block;
 }
 
 #GDPComparisonSector2 {
-  width: 45% !important;
+  width: 49% !important;
   display: inline-block;
 }
 

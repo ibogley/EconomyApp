@@ -4,6 +4,8 @@ PlotTheme <- theme(plot.title = element_text(hjust = .5),legend.position = "none
 
 PlotText <- geom_text(aes(label = ""))
 
+PlotLegend <- scale_fill_discrete(labels = label_wrap(5))
+
 if (input$StateOrRegion == "State") {
   Geography <- input$State
 } else if (input$StateOrRegion == "Region") {
@@ -18,7 +20,7 @@ output$GDPComparisonIndustry1 <- renderPlot({
       filter(year(Date)==input$ComparisonY1)
     
     PlotTitle <- labs(title = paste(
-      "GDP of ",Geography," by Industry (",input$ComparisonY1,")",
+      "GDP: ",Geography," (",input$ComparisonY1,")",
       sep = ""))
     
   } else if (input$ComparisonTimeScale=="Quarter") {
@@ -28,7 +30,7 @@ output$GDPComparisonIndustry1 <- renderPlot({
              quarter(Date)==input$ComparisonQ1)
     
     PlotTitle <- labs(title = paste(
-      "GDP of ",Geography," by Industry (",input$ComparisonY1,
+      "GDP: ",Geography," (",input$ComparisonY1,
       ", Quarter ",input$ComparisonQ1,")",
       sep = ""))
     
@@ -59,7 +61,8 @@ output$GDPComparisonIndustry1 <- renderPlot({
       coord_polar("y") +
       PlotTitle + 
       PlotTheme +
-      PlotText
+      PlotText +
+      PlotLegend
     
   } else if (input$StateOrRegion == "Region") {
     TempDF %>%
@@ -73,7 +76,8 @@ output$GDPComparisonIndustry1 <- renderPlot({
       coord_polar("y") +
       PlotTitle + 
       PlotTheme +
-      PlotText
+      PlotText +
+      PlotLegend
   }
 })
 
@@ -89,7 +93,7 @@ output$GDPComparisonIndustry2 <- renderPlot({
       filter(year(Date)==input$ComparisonY2)
     
     PlotTitle <- labs(title = paste(
-      "GDP of ",Geography," by Industry (",input$ComparisonY2,")",
+      "GDP: ",Geography," (",input$ComparisonY2,")",
       sep = ""))
     
   } else if (input$ComparisonTimeScale=="Quarter") {
@@ -99,7 +103,7 @@ output$GDPComparisonIndustry2 <- renderPlot({
              quarter(Date)==input$ComparisonQ2)
     
     PlotTitle <- labs(title = paste(
-      "GDP of ",Geography," by Industry (",input$ComparisonY2,
+      "GDP: ",Geography," (",input$ComparisonY2,
       ", Quarter ",input$ComparisonQ2,")",
       sep = ""))
     
@@ -130,7 +134,8 @@ output$GDPComparisonIndustry2 <- renderPlot({
       coord_polar("y") +
       PlotTitle + 
       PlotTheme +
-      PlotText
+      PlotText +
+      PlotLegend
       
     
   } else if (input$StateOrRegion == "Region") {
@@ -145,7 +150,8 @@ output$GDPComparisonIndustry2 <- renderPlot({
       coord_polar("y") +
       PlotTitle + 
       PlotTheme +
-      PlotText
+      PlotText +
+      PlotLegend
   }
 })
 
@@ -160,7 +166,7 @@ output$GDPComparisonSector1 <- renderPlot({
       filter(year(Date)==input$ComparisonY1)
     
     PlotTitle <- labs(title = paste(
-      "GDP of ",Geography," by Sector (",input$ComparisonY1,")",
+      "GDP: ",Geography," (",input$ComparisonY1,")",
       sep = ""))
     
   } else if (input$ComparisonTimeScale=="Quarter") {
@@ -170,7 +176,7 @@ output$GDPComparisonSector1 <- renderPlot({
              quarter(Date)==input$ComparisonQ1)
     
     PlotTitle <- labs(title = paste(
-      "GDP of ",Geography," by Sector (",input$ComparisonY1,
+      "GDP: ",Geography," (",input$ComparisonY1,
       ", Quarter ",input$ComparisonQ1,")",
       sep = ""))
     
@@ -191,7 +197,8 @@ output$GDPComparisonSector1 <- renderPlot({
       theme(plot.title = element_text(hjust = .5),
             axis.title = element_blank(),axis.text = element_blank(),
             axis.ticks = element_blank()) +
-      geom_text(aes(y = pos, label = paste(round(GDP/sum(GDP),2)*100,"%",sep = "")))
+      geom_text(aes(y = pos, label = paste(round(GDP/sum(GDP),2)*100,"%",sep = ""))) +
+      PlotLegend
   } else if (input$StateOrRegion == "Region") {
     TempDF %>%
       filter(Region == input$Region) %>%
@@ -206,7 +213,8 @@ output$GDPComparisonSector1 <- renderPlot({
       theme(plot.title = element_text(hjust = .5),
             axis.title = element_blank(),axis.text = element_blank(),
             axis.ticks = element_blank()) +
-      geom_text(aes(y = pos, label = paste(round(GDP/sum(GDP),2)*100,"%",sep = "")))
+      geom_text(aes(y = pos, label = paste(round(GDP/sum(GDP),2)*100,"%",sep = ""))) + 
+      PlotLegend
   }
 })
 
@@ -219,7 +227,7 @@ output$GDPComparisonSector2 <- renderPlot({
       filter(year(Date)==input$ComparisonY2)
     
     PlotTitle <- labs(title = paste(
-      "GDP of ",Geography," by Sector (",input$ComparisonY2,")",
+      "GDP: ",Geography," (",input$ComparisonY2,")",
       sep = ""))
     
   } else if (input$ComparisonTimeScale=="Quarter") {
@@ -229,7 +237,7 @@ output$GDPComparisonSector2 <- renderPlot({
              quarter(Date)==input$ComparisonQ2)
     
     PlotTitle <- labs(title = paste(
-      "GDP of ",Geography," by Sector (",input$ComparisonY2,
+      "GDP: ",Geography," (",input$ComparisonY2,
       ", Quarter ",input$ComparisonQ2,")",
       sep = ""))
     
@@ -250,7 +258,8 @@ output$GDPComparisonSector2 <- renderPlot({
       theme(plot.title = element_text(hjust = .5),
             axis.title = element_blank(),axis.text = element_blank(),
             axis.ticks = element_blank()) +
-      geom_text(aes(y = pos, label = paste(round(GDP/sum(GDP),2)*100,"%",sep = "")))
+      geom_text(aes(y = pos, label = paste(round(GDP/sum(GDP),2)*100,"%",sep = ""))) +
+      PlotLegend
   } else if (input$StateOrRegion == "Region") {
     TempDF %>%
       filter(Region == input$Region) %>%
@@ -265,6 +274,7 @@ output$GDPComparisonSector2 <- renderPlot({
       theme(plot.title = element_text(hjust = .5),
             axis.title = element_blank(),axis.text = element_blank(),
             axis.ticks = element_blank()) +
-      geom_text(aes(y = pos, label = paste(round(GDP/sum(GDP),2)*100,"%",sep = "")))
+      geom_text(aes(y = pos, label = paste(round(GDP/sum(GDP),2)*100,"%",sep = ""))) +
+      PlotLegend
   }
 })

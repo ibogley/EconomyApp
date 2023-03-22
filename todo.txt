@@ -1,0 +1,8 @@
+todo:
+- Add different types of graphs for human capital (Census data?)
+	- Education levels
+	- Age groups, population
+- Add trade values (Trade.gov?)
+	- between states
+	- between nations
+- Add fixed asset values by industry, type
