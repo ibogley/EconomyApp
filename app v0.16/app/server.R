@@ -1,29 +1,12 @@
-library(shiny)
-
-
 function(input, output, session) {
-  
-  ##################################################### UI #####################################################
-  output$GeographicSelector <- renderUI({
-    if (input$GranularitySelector=="Region") {
-      selectInput("RegionSelector","Region",choices = unique(state.region))
+  ##################################################### UI: Regional #####################################################
+  output$RegionalSelector <- renderUI({
+    if (input$GranularitySelector=="Regional") {
+      selectInput("RegionSelector","Region",unique(as.character(state.region)))
     } else if (input$GranularitySelector=="State") {
-      selectInput("StateSelector","State",choices = state.name)
-    } else {}
-  })
-  
-  output$RPPDescriptionUI <- renderUI({
-    if (input$GranularitySelector == "Region") {
-      selectInput("RPPDescriptions","Descriptions",
-                  choices = RPPDescriptions,
-                  multiple = FALSE)
-    } else {
-      selectInput("RPPDescriptions","Descriptions",
-                  choices = RPPDescriptions[-1],
-                  multiple = TRUE)
+      selectInput("StateSelector","State",c(state.name))
     }
   })
-  
   
   ##################################################### GDP GRAPH #####################################################
   output$GDPGraph <- renderPlot({
@@ -140,9 +123,9 @@ function(input, output, session) {
           ggplot()
       }
       
-      Plot + scale_y_continuous(labels = comma, limits = c(0, NA)) +
-        ylab("GDP (Current Millions USD)") +
-        labs(title = paste("Economic Size of the US (GDP, Quarterly)", sep = "")) +
+      Plot + scale_y_continuous(labels = label_number(suffix = "B",scale = 1e-3), limits = c(0, NA)) +
+        ylab("GDP (Billions USD)") +
+        labs(title = paste("Economic Size of the US (Nominal GDP, Quarterly)", sep = "")) +
         theme(plot.title = element_text(hjust = .5)) +
         geom_hline(yintercept = 0) +
         expand_limits(y = 0) +
@@ -153,7 +136,7 @@ function(input, output, session) {
   
   ##################################################### HC GRAPH #####################################################
   
-  output$HumanCapitalGraph <- renderPlot({
+  output$EmploymentGraph <- renderPlot({
     if (input$GranularitySelector == "State") {
       #Statewide
       TempDF <- StateHCDF %>%
@@ -265,6 +248,7 @@ function(input, output, session) {
       
     }
   })
+  
   ##################################################### FFR GRAPH #####################################################
   output$FFRGraph <- renderPlot({
     FFSDF %>%
@@ -272,25 +256,133 @@ function(input, output, session) {
       filter(year >= input$CreditYear[1], year <= input$CreditYear[2]) %>%
       ggplot() +
       geom_line(aes(x = date, y = FederalFundsRate/100)) + 
-      labs(title = "Federal Funds Rate") +
+      labs(title = "Federal Funds Rate (%)") +
       theme(plot.title = element_text(hjust = .5)) +
       geom_hline(yintercept = 0) +
-      scale_y_continuous(labels = percent)
+      scale_y_continuous(labels = percent) +
+      ylab("")
   })
-  ##################################################### Credit GRAPH #####################################################
-  output$CreditGraph <- renderPlot({
-    CreditDF %>% 
-      filter(Year>=input$CreditYear[1],Year<=input$CreditYear[2],
-             State == input$CreditState,!CreditRating == "N/A") %>% 
-      mutate(Year = factor(Year,levels = input$CreditYear[1]:input$CreditYear[2]),
-             CreditRating = factor(CreditRating,levels = c("BBB-","BBB","BBB+","A-","A","A+","AA-","AA","AA+","AAA"))) %>%
-      ggplot(aes(
-        x = Year,y = CreditRating,
-        fill = CreditRating)) +
-      geom_bar(stat = "identity") +
-      scale_x_discrete(breaks = min(CreditDF$Year):max(CreditDF$Year)) +
-      labs(title = paste("Standard & Poor's Credit Rating: ",input$CreditState,sep = "")) +
-      theme(legend.position = "none",plot.title = element_text(hjust = .5))
+  
+  ##################################################### Capital Stock GRAPH #####################################################
+  output$CSGraph <- renderPlot({
+    CapitalStockDF %>%
+      mutate(year = as.integer(substr(date,1,4))) %>%
+      filter(year >= input$CapitalYear[1], year <= input$CapitalYear[2]) %>%
+      ggplot() +
+      geom_line(aes(x = date, y = CapitalStockPPP)) + 
+      labs(title = "Capital Stock: PPP (Millions 2017 USD)") +
+      theme(plot.title = element_text(hjust = .5)) +
+      geom_hline(yintercept = 0) +
+      scale_y_continuous(labels = label_number(suffix = "M",scale = 1e-6)) +
+      ylab("")
   })
-
+  
+  ##################################################### S&P500 GRAPH #####################################################
+  output$SP500Graph <- renderPlot({
+    SP500DF %>%
+      mutate(year = as.integer(substr(date,1,4))) %>%
+      filter(year >= input$StockYear[1], year <= input$StockYear[2]) %>%
+      ggplot() +
+      geom_line(aes(x = date, y = SP500)) + 
+      labs(title = "S&P 500 Index") +
+      theme(plot.title = element_text(hjust = .5)) +
+      geom_hline(yintercept = 0) +
+      ylab("")
+  })
+  
+  ##################################################### Dow Jones GRAPH #####################################################
+  output$DowJonesGraph <- renderPlot({
+    DowJonesDF %>%
+      mutate(year = as.integer(substr(date,1,4))) %>%
+      filter(year >= input$StockYear[1], year <= input$StockYear[2]) %>%
+      ggplot() +
+      geom_line(aes(x = date, y = DowJones)) + 
+      labs(title = "Dow Jones Industrial Average") +
+      theme(plot.title = element_text(hjust = .5)) +
+      geom_hline(yintercept = 0) +
+      ylab("")
+  })
+  
+  ##################################################### NASDAQ GRAPH #####################################################
+  output$NASDAQGraph <- renderPlot({
+    NASDAQDF %>%
+      mutate(year = as.integer(substr(date,1,4))) %>%
+      filter(year >= input$StockYear[1], year <= input$StockYear[2]) %>%
+      ggplot() +
+      geom_line(aes(x = date, y = NASDAQComposite)) + 
+      labs(title = "NASDAQ Composite Index") +
+      theme(plot.title = element_text(hjust = .5)) +
+      geom_hline(yintercept = 0) +
+      ylab("")
+  })
+  
+  ##################################################### M1 GRAPH #####################################################
+  output$M1Graph <- renderPlot({
+    M1DF %>%
+      mutate(year = as.integer(substr(date,1,4))) %>%
+      filter(year >= input$MoneySupplyYear[1], year <= input$MoneySupplyYear[2]) %>%
+      ggplot() +
+      geom_line(aes(x = date, y = M1)) + 
+      labs(title = "M1 (Billions USD)") +
+      theme(plot.title = element_text(hjust = .5)) +
+      geom_hline(yintercept = 0) +
+      scale_y_continuous(labels = label_number(suffix = "B")) +
+      ylab("")
+  })
+  
+  ##################################################### M2 GRAPH #####################################################
+  output$M2Graph <- renderPlot({
+    M2DF %>%
+      mutate(year = as.integer(substr(date,1,4))) %>%
+      filter(year >= input$MoneySupplyYear[1], year <= input$MoneySupplyYear[2]) %>%
+      ggplot() +
+      geom_line(aes(x = date, y = M2)) + 
+      labs(title = "M2 (Billions USD)") +
+      theme(plot.title = element_text(hjust = .5)) +
+      geom_hline(yintercept = 0) +
+      scale_y_continuous(labels = label_number(suffix = "B")) +
+      ylab("")
+  })
+  
+  ##################################################### Inflation GRAPH #####################################################
+  output$InflationGraph <- renderPlot({
+    InflationDF %>%
+      mutate(year = as.integer(substr(date,1,4))) %>%
+      filter(year >= input$PriceYear[1], year <= input$PriceYear[2]) %>%
+      ggplot() +
+      geom_line(aes(x = date, y = InflationConsumerPrices/100)) + 
+      labs(title = "Inflation (Consumer Prices, %YoY)") +
+      theme(plot.title = element_text(hjust = .5)) +
+      geom_hline(yintercept = 0) +
+      scale_y_continuous(labels = percent) +
+      ylab("")
+  })
+  
+  ##################################################### CPI All Urban GRAPH #####################################################
+  output$CPIGraph <- renderPlot({
+    CPIAllDF %>%
+      mutate(year = as.integer(substr(date,1,4))) %>%
+      filter(year >= input$PriceYear[1], year <= input$PriceYear[2]) %>%
+      ggplot() +
+      geom_line(aes(x = date, y = CPI)) + 
+      labs(title = "CPI, All Items for Urban Consumers") +
+      theme(plot.title = element_text(hjust = .5)) +
+      geom_hline(yintercept = 0) +
+      ylab("")
+  })
+  
+  ##################################################### CPI Less Food, Energy GRAPH #####################################################
+  output$CPILFEGraph <- renderPlot({
+    CPIAllLFEDF %>%
+      mutate(year = as.integer(substr(date,1,4))) %>%
+      filter(year >= input$PriceYear[1], year <= input$PriceYear[2]) %>%
+      ggplot() +
+      geom_line(aes(x = date, y = CPILFE)) + 
+      labs(title = "CPI, All Items for Urban Consumers less Food & Energy") +
+      theme(plot.title = element_text(hjust = .5)) +
+      geom_hline(yintercept = 0) +
+      ylab("")
+  })
+  
+  
 }

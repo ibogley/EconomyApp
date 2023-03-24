@@ -1,8 +1,27 @@
 todo:
+- Change regional graphics to a single tab
 - Add different types of graphs for human capital (Census data?)
 	- Education levels
 	- Age groups, population
+- Employment
+	- Unemployment Rate
+	- Median Wage, Average Wage
+- Credit
+	- Household Debt
+	- State Gov Debt
+	- Bond Price
+	- Federal Debt
+- Prices of commodities
+	- Steel
+	- Timber
+	- Oil (Brent Crude)
 - Add trade values (Trade.gov?)
 	- between states
 	- between nations
-- Add fixed asset values by industry, type
+
+- Add pct change values
+	- annual
+
+- Make faster
+	- Store data in csv and check if new data exists?
+	- Cut down on data presented?
