@@ -86,6 +86,12 @@ CPIAllDF <- fredr("CPIAUCSL") %>%
 CPIAllLFEDF <- fredr("CPILFESL") %>%
   select(date,value) %>% rename("CPILFE" = value)
 
+MedianWageDF <- fredr("LES1252881600Q") %>%
+  select(date,value) %>% rename("MedianWage" = value)
+
+AvgWageDF <- fredr("CES0500000003") %>%
+  select(date,value) %>% rename("AvgWage" = value)
+
 ##################################################### GDP DATA #####################################################
 GDPDFLineCodeMaster <- data.frame("LineCode" = c(3,6,10,11,12,34,35,36,45,51,56,60,64,65,69,70,76,79,82,84,85,86),
                                   "Industry" = GDPIndustries) %>%

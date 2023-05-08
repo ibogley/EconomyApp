@@ -134,7 +134,7 @@ function(input, output, session) {
     }
   })
   
-  ##################################################### HC GRAPH #####################################################
+  ##################################################### Employment GRAPH #####################################################
   
   output$EmploymentGraph <- renderPlot({
     if (input$GranularitySelector == "State") {
@@ -238,15 +238,43 @@ function(input, output, session) {
           ggplot()
       }
       
-      Plot + scale_y_continuous(labels = comma, limits = c(0, NA)) +
-        ylab("Jobs") +
-        labs(title = paste("Jobs in the US (Yearly)", sep = "")) +
+      Plot + scale_y_continuous(labels = label_number(suffix = "M",scale = 1e-6), limits = c(0, NA)) +
+        ylab("") +
+        labs(title = paste("Jobs in the US (Yearly, Millions)", sep = "")) +
         theme(plot.title = element_text(hjust = .5)) +
         geom_hline(yintercept = 0) +
         expand_limits(y = 0) +
         IndustryBreakdown
       
     }
+  })
+  
+  ##################################################### Median Wage GRAPH #####################################################
+  output$MedianWageGraph <- renderPlot({
+    MedianWageDF %>%
+      mutate(year = as.integer(substr(date,1,4))) %>%
+      filter(year >= input$HumanCapitalYears[1], year <= input$HumanCapitalYears[2]) %>%
+      ggplot() +
+      geom_line(aes(x = date, y = MedianWage)) + 
+      labs(title = "Real Median Weekly Wage: Wage and Salary Workers 16+") +
+      theme(plot.title = element_text(hjust = .5)) +
+      geom_hline(yintercept = 0) +
+      scale_y_continuous(labels = dollar) +
+      ylab("")
+  })
+  
+  ##################################################### Avg Wage GRAPH #####################################################
+  output$AvgWageGraph <- renderPlot({
+    AvgWageDF %>%
+      mutate(year = as.integer(substr(date,1,4))) %>%
+      filter(year >= input$HumanCapitalYears[1], year <= input$HumanCapitalYears[2]) %>%
+      ggplot() +
+      geom_line(aes(x = date, y = AvgWage)) + 
+      labs(title = "Average Hourly Wage") +
+      theme(plot.title = element_text(hjust = .5)) +
+      geom_hline(yintercept = 0) +
+      scale_y_continuous(labels = dollar) +
+      ylab("")
   })
   
   ##################################################### FFR GRAPH #####################################################

@@ -46,7 +46,7 @@ fluidPage(
           h2("Employment"),
           sliderInput("HumanCapitalYears","Years",
                       min= 2000,max = CurrentYear,
-                      value = c(2000,CurrentYear),
+                      value = c(2006,CurrentYear),
                       sep = ""),
           selectInput("HumanCapitalIndustries","Industries",
                       choices = HumanCapitalIndustries,
@@ -54,7 +54,9 @@ fluidPage(
           checkboxInput("IncludeTotalJobs","Include Total",value = TRUE)
         ),
         mainPanel(
-          plotOutput("EmploymentGraph")
+          plotOutput("EmploymentGraph"),
+          plotOutput("MedianWageGraph"),
+          plotOutput("AvgWageGraph")
         )
       )
     ),
